@@ -1,17 +1,30 @@
-name: "Analysis - Concept and Practice"
+name: "Analysis: Concept and Practice"
 output_dir: ../docs
 navbar:
-  title: "Analysis - Concept and Practice"
+  title: "Analysis: Concept and Practice"
+  type: inverse
   left:
-  - text: Home
-    href: index.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
+    - text: "Main"
+      icon: fa-bar-chart
+      href: index.html
+    - text: "Statistics Milestones"
+      icon: fa-analytics
+    - text: About
+      icon: fa-info
+      href: about.html
+    - text: License
+      href: license.html
+    - text: "More"
+      icon: fa-gear
+      menu:
+        - text: "Heading 1"
+        - text: "Weather Check Report"
+          href: wc-article.html
 output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
     theme: cosmo
     highlight: textmate
+    css: style.css
+    code_folding: hide
