@@ -7,6 +7,15 @@ knitr::opts_chunk$set(fig.width = "center", fig.width = 10)
 # set any missing NAs in table to blank
 options(knitr.kable.NA='')
 
+# set 2 decimal places on digits
+# Register an inline hook:
+knitr::knit_hooks$set(inline = function(x) {
+  x <- sprintf("%1.2f", x)
+  paste(x, collapse = ", ")
+})
+# Thanks to RLesur on StackOverflow
+# https://stackoverflow.com/questions/48199137/set-number-of-decimal-places-to-show-in-output
+
 # load R packages
 # Function to Install and Load R Packages
 # thanks to Pratik Patil

@@ -25,7 +25,7 @@ navbar:
   right:
   - icon: fa-github
     text: Source code
-    href: https://github.com/JJCoen/Analysis - Concept and Practice
+    href: https://github.com/JJCoen/Analysis-Concept-and-Practice
 output:
   workflowr::wflow_html:
     toc: yes

@@ -15,13 +15,6 @@ output:
 # set `knitr` options and load packages
 source('code/01-initialisation.R')
 
-# Register an inline hook:
-knitr::knit_hooks$set(inline = function(x) {
-  x <- sprintf("%1.2f", x)
-  paste(x, collapse = ", ")
-})
-# Thanks to RLesur on StackOverflow
-# https://stackoverflow.com/questions/48199137/set-number-of-decimal-places-to-show-in-output
 ```
 
 # Background
