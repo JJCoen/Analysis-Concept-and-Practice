@@ -1,11 +1,75 @@
 ---
-title: "Home"
+title: "Analysis-Concept-and-Practice"
+type: inverse
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
     toc: false
+  css: styles.css
 editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+<style type="text/css">
+.title {
+  display: none;
+}
+
+#getting-started img {
+  margin-right: 10px;
+}
+
+</style>
+
+<div class="row" style="padding-top: 10px;">
+<div class="col-sm-6">
+
+# **My Conceptual Approach**
+
+I start by reflecting upon the research question and expressing it in scientific terms.  This generally indicates the data and which attributes of the data I require for analysis.  This leads to consideration of the appropriate method for analysis.  
+
+## Statistical and Mathematical Foundation
+in order to express the primary research question in scientific terms.
+
+1. Statistics.  
+[U. Texas, Austin, Foundations of Data Analysis](https://github.com/JJCoen/Certificates/blob/master/UTAustinX-Foundations-of-Data-Analysis-pt-2-Inference.pdf)
+1. Linear Algebra.  
+[U. Texas, Austin, Linear Algebra - Foundations to Frontier](https://github.com/JJCoen/Certificates/blob/master/UT5_04x.pdf)
+
+
+## Analytical Framework
+* __Primary Research Question__  
+    + By expressing the primary research question in scientific terms, it identifies properties that can be measured and assessed.
+    + This informs what data to collect.
+    
+* __Data Evaluation__
+    + Is the available data sufficient to carry out the study?
+    + What processing of the data needs to occur?
+    + What attributes give a compact description / summary of the data.
+    
+* __Analytical Method__
+    + Which method can best answer the primary research question
+
+
+</div>
+<div class="col-sm-6">
+
+<img src="./images/corporate-finance-inst.png" width = "80%">
+
+__Data Science__
+
+> "Success in a datascience project comes, not from access to any one exotic tool, 
+> but from having quantifiable goals,good methodology, cross-discipline interactions,
+> and a repeatable workflow"  
+> Nina Zumel and John Mount, Practical Data Science with R
+
+
+
+__Information content of available data__  
+
+> "The combination of some data and an aching desire for an answer does not ensure 
+> that a reasonable answer can be extracted from a given body of data"     
+>John W. Tukey
+  
+</a>
+</div>

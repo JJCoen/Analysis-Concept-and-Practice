@@ -1,5 +1,6 @@
 ---
 title: "About"
+type: inverse
 output:
   workflowr::wflow_html:
     toc: false

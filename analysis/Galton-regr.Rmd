@@ -1,0 +1,157 @@
+---
+title: "Inheritance of 'Characters', Part One"
+subtitle: Galton's discovery of Regression
+output:
+  html_document: 
+    toc: true
+    toc_float: true
+    number_sections: true
+    toc_depth: 2
+    css: style.css
+    code_folding: hide
+---
+
+```{r init, include=FALSE}
+# set `knitr` options and load packages
+source('code/01-initialisation.R')
+
+# Register an inline hook:
+knitr::knit_hooks$set(inline = function(x) {
+  x <- sprintf("%1.2f", x)
+  paste(x, collapse = ", ")
+})
+# Thanks to RLesur on StackOverflow
+# https://stackoverflow.com/questions/48199137/set-number-of-decimal-places-to-show-in-output
+```
+
+# Background
+
+This report follows the analysis schema recommended in [Foundations of Data Analysis](https://courses.edx.org/courses/course-v1:UTAustinX+UT.7.10x+1T2016/course/).  Within this framework, it presents the research inquiry from the viewpoint of Sir Francis Galton and how it relates to current understanding.
+
+Inheritance was a "hot topic" at the end of the 19th century.  It captured Sir Francis Galton's interest, not least because Galton was a cousin of Charles Darwin.  Through his endeavours, Francis Galton was to become the first Social Scientist.
+
+# Purpose
+Galton's objective in studying sweet peas was, in his own words:
+
+> to find a population possessed of some measurable characteristic 
+> that was suitable to investigating the cause of statistical similarity between successive generations[^1].
+
+# Reflect on the Question  
+
+__Pimary Research Question:__   
+$\color{#4b0082}{\text{Is it possible to quantify the inheritance of a particular "character"?}}$  
+
+Galton had considered inheritance of characteristics in a new generation as due to attributes in a grandparent or in the ancestral line.  This  "reversion" to ancestral type was also referred to as "atavism".  It was a genetic process.
+
+> Lastly, though the talent and character of both of the parents might,
+> in any particular case, be of a remarkably noble order, and thoroughly
+> congenial, yet they would necessarily have such mongrel
+> antecedents that it would be absurd to expect their children to 
+> invariably equal them in their natural endowments. The law of atavism
+> prevents it[^2].
+
+Nonetheless, Galton was intrigued why the distribution (in terms of mean and variance)  of a physical attribute was constant between one generation and the next.  Any specific differences would be due to reversion to an ancestral trait, he assumed. 
+
+# Inspect the Data  
+In his early work, Galton chose to study sweet peas due to their ability to self-germinate.  This means that the offspring has only one parent thus simplifying the analysis.  
+
+<center>
+![](./images/Galtons-notes-on-sweet-peas.png)
+**Figure 1:** Record of sweet pea measurements. 
+</center>
+
+He sorted 700 sweet pea seeds into seven groups. The groups were equally spaced according to diameter size. So the diameter size for a particular group is representative of that group or class.  He distributed a full set of the seven groups to each of 10 friends.  Each packet contained 10 seeds.  Having grown the seeds, his friends returned the offspring seeds to Galton.  In this way, he accumulated 700 observations.
+
+The __R__ package _psych_ contains Galton's peas data.  
+
+__Number of offspring at each parent seed size__
+```{r group sizes, comment=""}
+data(peas) 
+setDT(peas)    # to convert data frames and lists to data table
+
+parent_size <- unique(peas$parent)
+cat("Parent seed diameters: \n", parent_size)
+
+cat("\nNumber of seeds at each diameter size: \n",
+    map_int(parent_size, 
+            function(x_val) peas[parent == x_val] %>% nrow()  )
+)
+```
+This confirms that the 100 parent seeds of size 21, for instance,  produced 100 offspring, and so on.
+
+__Range of child seed sizes for each parent seed size__
+```{r inspect data, comment=""}
+parent_size <- peas[, unique(parent)]
+# cat("Parent |   Range of Child seeds \n")
+for(i in parent_size) {
+  cat(i, "    | ", peas[parent == i, unique(child)], "\n")
+}
+
+```
+
+Galton himself tabulated his findings as follows:
+<center>
+![parent seeds](./images/parent-seeds-and-their-produce.png)
+**Table 1:** Summary of sweet pea measurements. 
+</center>
+
+```{r}
+child_mean <- peas[, mean(child)]
+
+```
+
+What is striking in Galton's summary above is that means of the 'filial seeds' are not centred on the mean of the corresponding parent seed.  Filial seed means vary about the grand mean of all the child seeds (`r child_mean`).
+
+The parent seed size is the independent variable `x` while filial seed size in the dependent variable `y`.  In effect, Galton selected representative values of `x` (for example, by rounding).  For each representative `x` value, he calculated the mean `y`.  Galton was meticulous about making diagrams to illustrate his findings.  
+
+```{r}
+# child mean for each parent seed size
+peas_mean <- peas[, .(child = mean(child)), by = parent]
+
+# Calculate the points for a Linear Least Squares line
+peas_mean[, LLS := predict(lm(child ~ parent, data=peas_mean)) ]
+slope <- peas_mean[, (LLS[1]-LLS[7])/(parent[1]-parent[7])]
+
+parent_sd <- peas_mean[, sd(parent)]
+child_sd <- peas_mean[, sd(child)]
+
+# ggplot recommendations from
+# https://www.datanovia.com/en/blog/ggplot-title-subtitle-and-caption/
+
+theme_update(plot.title = element_text(hjust = 0.5), 
+             plot.subtitle=element_text(hjust = 0.9) )
+ggplot(peas_mean, aes(x = factor(parent), y = child) ) +
+  geom_line(aes(y=LLS), group="", colour="blue") +
+  geom_point(pch = 10, size = 3, alpha=0.5) +
+  ggtitle("Association between \nparent and child seed diameters", subtitle = "100th inch") +
+  labs(x="parent", caption = "Data source: psyche package") + 
+  theme(plot.title = element_text(color = "red", 
+                            size = 12), 
+        plot.subtitle = element_text(size = 8) )
+
+```
+<center>**Figure 2:** Representative x and mean y values. 
+</center>
+
+Figure 2 shows the least squares fitted line which has a slope of `r slope`.  At the time, Galton drew the best line between the means of the offspring by line of sight.  He estimated that this line had a slope of 0.33[^3].  Significantly, the slope is less than 1.  This means that there is less variability in the offspring sizes than in the parent sizes. So extreme values for the parent result in less extreme outcomes in the child.  Initially, he assumed that this was due to reversion (atavism).  Later, in his work with Karl Pearson, he realised that this is a statistical phenomenon which he described with the famous phase _regression to the mean_.  
+
+Using standard deviation as the measure of variability, the child seed value (`r child_sd`) is less than the parent seeds (`r parent_sd`).  If they were equal then the best fit line would have a slope of 1. So the slope of the line gives a measure of how the new generation regresses from the parent generation.
+
+Figure 2 was the precursor of the _Graph of Averages_[^4].
+
+# Conclusions
+
+Galton was the first to describe and explain the common phenomenon of regression toward the mean, which he observed in his experiments on the size of the seeds of successive generations of sweet peas.  Galton's innovation was to record this phenomenon in the context of simple linear regression of data points[^5]. 
+
+[^1]: Galton, F. "Natural Inheritance", New York, Macmillan, 1889. 
+http://galton.org/books/natural-inheritance/pdf/galton-nat-inh-1up-clean.pdf
+
+[^2]: Galton, F. (1865), “Hereditary Talent and Character,” Macmillan’s Magazine, 12, 157–166 (Part I), 318–327 (Part II)
+
+[^3]: Stanton, J.  (2001) "Galton, Pearson, and the Peas: A Brief Historyof Linear Regression for Statistics Instructors", Journal of Statistics Education, 9:3, , DOI:10.1080/10691898.2001.11910537To 
+https://doi.org/10.1080/10691898.2001.11910537C
+
+[^4]: Joseph, Anthony D. "Regression", https://courses.edx.org/courses/course-v1:BerkeleyX+CS110x+2T2016/course/ <accessed 29 Sept, 2020>
+
+[^5]: "Francis Galton", Wikipedia, September 2020.
+https://en.wikipedia.org/wiki/Francis_Galton#Model_for_population_stability
