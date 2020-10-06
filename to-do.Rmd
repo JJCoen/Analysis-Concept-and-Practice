@@ -1,0 +1,9 @@
+---
+title: "to-do"
+output: html_document
+---
+
+## Reproducibility
+* Making all information related to the analysis available according to the guidelines in JHU course.
+* Taking advantage of the techniques for reproducibility in the  
+[Emory University course](https://github.com/JJCoen/Certificates/blob/master/Coursera/Emory-Uni-Reproducible-Templates-for-Analysis.pdf)
