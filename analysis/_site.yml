@@ -1,25 +1,31 @@
-name: "Analysis: Concept and Practice"
+name: 'Analysis: Concept and Practice'
 output_dir: ../docs
 navbar:
-  title: "Analysis: Concept and Practice"
+  title: 'Analysis: Concept and Practice'
   type: inverse
   left:
-    - text: "Main"
-      icon: fa-bar-chart
-      href: index.html
-    - text: "Statistics Milestones"
-      icon: fa-analytics
-    - text: About
-      icon: fa-info
-      href: about.html
-    - text: License
-      href: license.html
-    - text: "More"
-      icon: fa-gear
-      menu:
-        - text: "Heading 1"
-        - text: "Weather Check Report"
-          href: wc-article.html
+  - text: Main
+    icon: fa-bar-chart
+    href: index.html
+  - text: Statistics Milestones
+    icon: fa-analytics
+    menu:
+    - text: Galton discovers regression
+      href: Galton-regr.html
+  - text: About
+    icon: fa-info
+    href: about.html
+  - text: License
+    href: license.html
+  - text: More
+    icon: fa-gear
+    menu:
+    - text: Weather Check Report
+      href: wc-article.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/JJCoen/Analysis - Concept and Practice
 output:
   workflowr::wflow_html:
     toc: yes
